@@ -11,29 +11,33 @@ from num2words import num2words
 class ContractApp:
     def __init__(self, master):
         self.master = master
-        self.master.title("Contract Generator")
-        self.master.geometry("900x700")
-        self.master.configure(bg="#f0f0f0")
 
         # Set up the main frame and scrollable canvas for the UI
         self.main_frame = ttk.Frame(self.master)
         self.main_frame.pack(fill=tk.BOTH, expand=True)
+        self.main_frame.pack_propagate(False)  # Prevents resizing based on content
 
         self.canvas = tk.Canvas(self.main_frame)
         self.scroll_y = ttk.Scrollbar(self.main_frame, orient="vertical", command=self.canvas.yview)
-        self.scrollable_frame = ttk.Frame(self.canvas)
-
-        self.scrollable_frame.bind(
-            "<Configure>",
-            lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all"))
-        )
-
-        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
         self.canvas.configure(yscrollcommand=self.scroll_y.set)
-        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+        # Create a scrollable frame inside the canvas
+        self.scrollable_frame = ttk.Frame(self.canvas)
+        self.scrollable_frame_id = self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+
+        # Update canvas scroll region when the scrollable frame size changes
+        self.scrollable_frame.bind("<Configure>", lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")))
+
+        # Add scrolling functionality for both scroll bar and mouse wheel
         self.scroll_y.pack(side=tk.RIGHT, fill=tk.Y)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
 
         self.create_widgets()
+
+    def _on_mousewheel(self, event):
+        """Scroll with mouse wheel."""
+        self.canvas.yview_scroll(int(-1*(event.delta/120)), "units")
 
     def create_widgets(self):
         # Title
@@ -69,6 +73,7 @@ class ContractApp:
         # Button to export CSV
         btn_export_csv = ttk.Button(self.scrollable_frame, text="Export to CSV and Open", command=self.export_csv)
         btn_export_csv.grid(row=6, column=1, padx=10, pady=10)
+
 
 
     def export_csv(self):

@@ -151,45 +151,19 @@ def create_contract_pdf(seller_info, buyer_info, device_info, contract_terms, pr
 def save_to_csv(seller_info, buyer_info, device_info, contract_terms, price_info, contract_code):
     # Define the file and check if it exists
     csv_file = 'contracts.csv'
-    file_exists = os.path.isfile(csv_file)
-
     with open(csv_file, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
 
-        # Header Section for new files with structured sections
-        if not file_exists:
-            writer.writerow(["Contract Summary"])
-            writer.writerow(["Contract Code", contract_code])
-            writer.writerow([])  # Blank line for separation
+        # Add a clear header block for each contract entry
+        writer.writerow(["Contract Summary"])
+        writer.writerow(["Contract Code", contract_code])
+        writer.writerow([])  # Blank line for separation
 
-            # Section Headers
-            writer.writerow(["Seller Information"])
-            writer.writerow([
-                "First Name", "Last Name", "Street + House No", "PLZ / Ort", "Phone", "Email", "ID No"
-            ])
-            writer.writerow([])
-
-            writer.writerow(["Buyer Information"])
-            writer.writerow([
-                "First Name", "Last Name", "Street + House No", "PLZ / Ort", "Phone", "Email", "ID No"
-            ])
-            writer.writerow([])
-
-            writer.writerow(["Device Information"])
-            writer.writerow([
-                "Manufacturer", "Model", "Serial Number", "Features", "Condition", "Accessories"
-            ])
-            writer.writerow([])
-
-            writer.writerow(["Price and Terms"])
-            writer.writerow(["Price (EUR)", "Price (Words)", "Delivery Date", "Contract Terms"])
-            writer.writerow([])  # End of Header Section
-
-        # Write the data in a structured format, under the headers
-        writer.writerow([contract_code])  # Contract code row for reference
-        writer.writerow([])  # Blank line for section separation
-
-        # Seller Information
+        # Section Headers and Seller Information
+        writer.writerow(["Seller Information"])
+        writer.writerow([
+            "First Name", "Last Name", "Street + House No", "PLZ / Ort", "Phone", "Email", "ID No"
+        ])
         writer.writerow([
             seller_info.get('Vorname', ''), seller_info.get('Nachname', ''),
             seller_info.get('Straße', ''), seller_info.get('PLZ / Ort', ''),
@@ -199,6 +173,10 @@ def save_to_csv(seller_info, buyer_info, device_info, contract_terms, price_info
         writer.writerow([])  # Blank line for separation
 
         # Buyer Information
+        writer.writerow(["Buyer Information"])
+        writer.writerow([
+            "First Name", "Last Name", "Street + House No", "PLZ / Ort", "Phone", "Email", "ID No"
+        ])
         writer.writerow([
             buyer_info.get('Vorname', ''), buyer_info.get('Nachname', ''),
             buyer_info.get('Straße', ''), buyer_info.get('PLZ / Ort', ''),
@@ -208,6 +186,10 @@ def save_to_csv(seller_info, buyer_info, device_info, contract_terms, price_info
         writer.writerow([])  # Blank line for separation
 
         # Device Information
+        writer.writerow(["Device Information"])
+        writer.writerow([
+            "Manufacturer", "Model", "Serial Number", "Features", "Condition", "Accessories"
+        ])
         writer.writerow([
             device_info.get('Hersteller', ''), device_info.get('Modell', ''),
             device_info.get('Seriennummer', ''), device_info.get('Besonderheiten', ''),
@@ -216,6 +198,8 @@ def save_to_csv(seller_info, buyer_info, device_info, contract_terms, price_info
         writer.writerow([])  # Blank line for separation
 
         # Price and Terms
+        writer.writerow(["Price and Terms"])
+        writer.writerow(["Price (EUR)", "Price (Words)", "Delivery Date", "Contract Terms"])
         writer.writerow([
             price_info.get('price', ''), price_info.get('price_in_words', ''),
             price_info.get('delivery_date', ''), contract_terms

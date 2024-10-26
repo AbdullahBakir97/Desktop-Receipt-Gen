@@ -132,7 +132,6 @@ def open_pdf_and_print(file_name):
 class ReceiptApp:
     def __init__(self, master):
         self.master = master
-        self.master.title("Quittungserstellung")
 
         self.items = []
 
