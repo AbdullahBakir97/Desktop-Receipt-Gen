@@ -188,7 +188,7 @@ class ReceiptApp:
         try:
             unit_price = float(unit_price_str)
         except ValueError:
-            messagebox.showerror("Fehler", "Bitte geben Sie einen gültigen Preis ein (z.B., 9,99 oder 9.99)")
+            messagebox.showerror("Fehler", "Bitte geben Sie einen gültigen Preis ein (z.B., 1,00 oder 9.99)")
             return
 
         tax_included = self.tax_var.get() == 1
